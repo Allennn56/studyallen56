@@ -1,0 +1,30 @@
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class myntra {
+public static void main(String[] args) throws InterruptedException {
+System.setProperty("webdriver.chrome.driver","C:\\Users\\STUDENT\\Downloads\\chromedriver_win32\\chromedriver.exe");
+WebDriver driver = new ChromeDriver();
+driver.manage().window().maximize();
+driver.get("https://www.google.com/");
+Thread.sleep(2000);
+WebElement searchBar = driver.findElement(By.name("q"));
+searchBar.sendKeys("Myntra");
+searchBar.sendKeys(Keys.ENTER);
+WebElement myntra = driver.findElement(By.xpath("/html/body/div[7]/div/div[11]/div[1]/div[2]/div[2]/div/div/div[1]/div/div/div/div/div/div/div/div[1]/a/h3"));
+myntra.click();
+WebElement profile = driver.findElement(By.xpath("//span[normalize-space()='Profile']"));
+profile.click();
+WebElement login = driver.findElement(By.className("desktop-linkButton"));
+login.click();
+WebElement num = driver.findElement(By.xpath("/html/body/div[2]/div/div[2]/div[3]/div[2]/div/div/div[1]/div/div/div[2]/div[2]/div[1]/input"));
+num.sendKeys("7093137102");
+WebElement sub = driver.findElement(By.className("submitBottomOption"));
+sub.click();
+}
+
+}
