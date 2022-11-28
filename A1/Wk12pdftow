@@ -42,3 +42,7 @@ WebElement choosePlan = driver.findElement(By.xpath("(//span[@class='r5zwp6-3 ii
 choosePlan.click();
 Thread.sleep(10000);
 WebElement download = driver.findElement(By.xpath("(//span[@class='r5zwp6-3 iiSRjo'])[4]"));
+download.click();
+}
+}
+
