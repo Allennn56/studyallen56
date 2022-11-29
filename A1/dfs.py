@@ -22,8 +22,8 @@ class Graph:
         # Recur for all the vertices
         # adjacent to this vertex
         for i in self.graph[v]:
-           if visited[i] = False
-                self.DFSfun(neighbour, visited)
+           if visited[i] == False:
+                self.DFSfun(i, visited)
  
     # The function to do DFS traversal. It uses
     # recursive DFSUtil()
@@ -31,7 +31,7 @@ class Graph:
  
         visited = [False]*(len(self.graph))
         
-        self.DFSfunc(v, visited)
+        self.DFSfun(v, visited)
  
 # Driver code
  
