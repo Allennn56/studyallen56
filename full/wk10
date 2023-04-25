@@ -1,0 +1,26 @@
+Source Code:
+$ git config --global user.name "cmr"
+$ git config --global user.email cmr@example.com
+
+Index.html
+<h1>welcome to my web page</h1>
+git init
+output 
+git add .
+git commit -m "Hello world"
+
+Create a new file (Index.html)
+<h1>welcome to my web page</h1>
+<p>My first website</p>
+
+git add .
+git commit -m "paragraph added"
+
+output 5 lines
+git log 
+git status
+git branch -M main
+git remote add origin url
+git push  origin main --force
+
+output 8 lines 
