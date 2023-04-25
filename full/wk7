@@ -1,0 +1,242 @@
+npm install express --save
+ npm install pug
+ npm install –g nodemon
+ npm install mongoose
+ npm install body-parser
+ npm install multer
+ npm install bcrypt
+ npm install express-validator
+
+login.pug 
+----------
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Login
+        style 
+            include ./my.css
+    body 
+        div(class='container')
+            include ./index.pug
+            h1 Login form
+            br
+            form(action="/Login" method="post" align="center")
+                label(for="username") username
+                input(type="text" name="username")
+                br
+                br
+                label(for="password") password
+                input(type="password" name="password")
+                br
+                br
+                input(type="submit" name="Login" value="Login")
+ --------
+ index.pug
+ 
+ doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title index page
+        style 
+            include ./my.css
+    body 
+        div(class='header')
+            h1 Login and Registration APP 
+            a(href="/Login") Login 
+            a(href="/Register") Register
+            
+ ------------------------
+ style.css
+ h1{
+    color:blue;
+    text-align:center;
+}
+a:link,a:visited{
+    background-color: brown;
+    color:white;
+    padding:14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+a:hover,a:active{
+    background-color: chartreuse;
+}
+.header {
+    padding: 10px;
+    text-align: center;
+    background: #1abc9c;
+    color: white;
+    font-size: 30px;
+  }
+  .container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 10px;
+  }
+
+  input{
+    width: 20%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+  }
+  
+  input[type=submit] {
+    background-color: #04AA6D;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+  label{
+    color: blue;
+    font-size: 22px;
+    padding: 8px;
+    text-align:left;
+  }
+  
+  ========================
+  app.js
+  const express = require('express');
+const bodyparser=require("body-parser")
+const bcrypt=require("bcrypt");
+const user=require('./models/user');
+const mongoose = require('mongoose');
+const app = express();
+const port = 80
+mongoose.connect("mongodb://localhost:27017/user",{userNewUrlParser : true});
+app.set('view engine', 'pug')
+
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended:true}))
+
+//handling get request
+
+app.get('/',function(req,res){
+
+res.render('index')
+})
+
+app.get('/Login',function(req,res){
+
+    res.render('Login')
+    })
+
+app.get('/Register',function(req,res){
+
+    res.render('Register')
+    })
+
+//handling post request
+
+app.post('/Register',function(req,res){
+
+        //console.log(req.body.username)
+        const newUser=new user();
+        newUser.username=req.body.username;
+
+        
+        var salt=bcrypt.genSaltSync(10);
+        var hash=bcrypt.hashSync(req.body.password,salt);
+
+        newUser.password=hash;
+
+        newUser.age=req.body.age;
+        newUser.mobile=req.body.mobile;
+
+        newUser.save(function(err,result){
+
+            if(err){
+
+                console.log(err);
+            }
+            else{
+                console.log(result);
+                res.redirect("Login");
+            }
+        })
+
+
+    })
+
+    app.post('/Login',function(req,res){
+        
+        user.findOne({username:req.body.username},function(err,docs){
+            if(err)
+            {
+                console.log(err)
+            
+            }
+            else
+            {
+                if(docs.username==req.body.username)
+                {
+                    bcrypt.compare(req.body.password,docs.password,function(err,data)
+                    {
+                        if(err)
+                        {
+                            console.log(err);
+                        }
+                        if(data)
+                        {
+                            console.log(data);
+                            res.send("Welcome");
+                        }
+                        else
+                        {
+                            res.send("invalid password");
+                        }
+
+                    });
+                    
+
+                   
+                    
+                }
+                else
+                {
+                    //res.send("invalid username or password")
+                    res.redirect("Register");
+                }
+
+            }
+
+        })
+        
+
+        })
+    
+
+
+
+
+app.listen(port,() => {console.log(`app is listening on http://localhost:${port}`)})
+-----------------------------------
+
+user.js
+
+const mongoose=require('mongoose');
+const Schema=mongoose.Schema;
+const userSchema=new Schema(
+    {
+username : {type:String},
+password : {type:String},
+age : {type:Number},
+mobile : {type:Number}
+}
+);
+
+module.exports=mongoose.model("user",userSchema);
