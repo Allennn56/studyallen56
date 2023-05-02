@@ -1,0 +1,5 @@
+npm install -g @angular/cli
+ng new project name
+Cd project name
+ng serve -o/--open
+ng generate component home
